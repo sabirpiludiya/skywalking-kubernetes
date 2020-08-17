@@ -15,7 +15,6 @@ spec:
       containers:
       - name: my-nginx
         image: sab578/dbservice-for-skywalking-test
-        imagePullPolicy: Never
         ports:
         - containerPort: 9595
 ---
