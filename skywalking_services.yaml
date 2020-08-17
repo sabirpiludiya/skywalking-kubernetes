@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skywalking-oap
+  namespace: development
+  labels:
+    service: skywalking-oap
+spec:
+  ports:
+  - port: 12800
+    name: rest
+  - port: 11800
+    name: grpc
+  - port: 1234
+    name: page
+  selector:
+    app: skywalking-oap
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: skywalking-ui
+  namespace: development
+  labels:
+    service: skywalking-ui
+spec:
+  ports:
+  - port: 8080
+    name: page
+    nodePort: 30001
+  type: NodePort
+  selector:
+    app: skywalking-ui
+---
