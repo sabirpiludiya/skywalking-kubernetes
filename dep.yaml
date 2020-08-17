@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skywalking-oap
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skywalking-oap
+  template:
+    metadata:
+      labels:
+        app: skywalking-oap
+        release: skywalking
+    spec:
+      serviceAccountName: skywalking-oap
+      containers:
+      - name: skywalking-oap
+        image: sab578/skywalking-with-mysql-driver:8.1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 11800
+          name: grpc
+        - containerPort: 12800
+          name: rest
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: .3
+          limits:
+            memory: "700Mi"
+            cpu: .4
+        env:
+        - name: JAVA_OPTS
+          value: -Xms256M -Xmx512M
+        #- name: SW_L0AD_CONFIG_FILE_FROM_VOLUME
+        #  value: "true"
+        # - name: SKYWALKING_oap_UID
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.uid
+        - name: SW_CLUSTER_K8S_NAMESPACE
+          value: development     
+        envFrom:
+        - secretRef:
+            name: skywalking-service-secret
+      #volumes:
+      #- name: config
+       # configMap:
+       #   name: skywalking-oap-config
