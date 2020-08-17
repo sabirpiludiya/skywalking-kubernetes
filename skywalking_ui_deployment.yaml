@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skywalking-ui
+  namespace: development
+  labels:
+    app: skywalking-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skywalking-ui
+  template:
+    metadata:
+      labels:
+        app: skywalking-ui:
+    spec:
+      containers:
+      - name: skywalking-ui
+        image: apache/skywalking-ui:8.1.0
+        ports:
+        - containerPort: 8080
+          name: page
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: .1
+          limits:
+            memory: "300Mi"
+            cpu: .2
+        env:
+        - name: SW_OAP_ADDRESS
+          value: skywalking-oap.development.svc.cluster.local:12800
